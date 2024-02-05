@@ -15,6 +15,7 @@ const oldPointStructure = {
 function oldScrabbleScorer(word) {
 	word = word.toUpperCase();
 	let letterPoints = "";
+   let wordPoints = 0; //my change
  
 	for (let i = 0; i < word.length; i++) {
  
@@ -22,19 +23,27 @@ function oldScrabbleScorer(word) {
  
 		 if (oldPointStructure[pointValue].includes(word[i])) {
 			letterPoints += `Points for '${word[i]}': ${pointValue}\n`
+         console.log(`Points for '${word[i]}': ${pointValue}`); //testing
+         //console.log(letterPoints); //testing
+         wordPoints += Number(pointValue);
 		 }
+       // console.log(`Points for '${word[i]}': ${pointValue}`); //testing
  
 	  }
+     // console.log(`Points for '${word[i]}': ${pointValue}`); //testing
+
 	}
-	return letterPoints;
- }
+  //console.log(`Points for '${word[i]}': ${pointValue}`); //testing
+	//return letterPoints;
+   return (wordPoints); //my change
+}
 
 // your job is to finish writing these functions and variables that we've named //
 // don't change the names or your program won't work as expected. //
 let userInputedWord ="";
 function initialPrompt() {
       userInputedWord = input.question("Please enter a word ");
-      console.log(oldScrabbleScorer(userInputedWord));
+      //console.log(oldScrabbleScorer(userInputedWord));
 };
 
 //let simpleScorer;
@@ -46,7 +55,7 @@ let simpleScorer = (word) => {
   return word.length;
 };
 
-//console.log(simpleScorer("Jam")); //testing for bug
+
 let vowelArr = ["A","E","I","O","U","Y"];
 //let vowelBonusScorer;
 let vowelBonusScorer = (word) => {
@@ -67,7 +76,7 @@ let vowelBonusScorer = (word) => {
 //let scrabbleScorer;
 let scrabbleScorer = (word) => {
    word = word.toUpperCase();
-   let letterPoints=0;
+   let letterPoints = 0;
 	for (let i = 0; i < word.length; i++) {
  	  for (const pointValue in oldPointStructure) {
  		 if (oldPointStructure[pointValue].includes(word[i])) {
@@ -110,16 +119,44 @@ function scorerPrompt() {
    return(scoringFunctionAlgorithms[userscoringFunctionOption]); //this returns an object
 }
 
-console.log(scorerPrompt()); //testing
-console.log(scorerPrompt.scoringFunction); //testing
+//console.log(scorerPrompt()); //testing
+//let pickedScoringOption = scorerPrompt(); //testing
 
-function transform() {};
+//console.log(scorerPrompt.scoringFunction); //testing
+
+function transform(oldStructure) {
+   let tempObject = {};
+   let tempObjectTwo = {};
+   let tempArr = []; //testing
+   for (prop in oldStructure) {
+      for (let i = 0; i < oldStructure[prop].length; i++) {
+         tempObject[oldPointStructure[prop][i].toLowerCase()] = prop;
+      } 
+      
+      tempArr = tempArr.concat(oldStructure[prop]); //testing
+      if (tempArr[0] in oldStructure[prop]) {//testing
+         console.log("yes");//testing
+      }//testing
+      
+   }
+  // console.log(tempArr.sort());//testing and it works
+   return tempObject;
+};
+
+let newTestPointStructure = transform(oldPointStructure); //testing
+console.log(newTestPointStructure);//testing
+//onsole.log(typeof newTestPointStructure.a);//testing
 
 let newPointStructure;
 
+
 function runProgram() {
    initialPrompt();
-   let userscoringFunctionOption = scorerPrompt();
+   let pickedScoringOption = scorerPrompt();
+   let wordScore = pickedScoringOption.scoringFunction(userInputedWord);
+   console.log(`Your total score for the word is ${wordScore}`);
+   
+
    //console.log(userscoringFunctionOption);//testing
    
 }
