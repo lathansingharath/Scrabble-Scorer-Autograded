@@ -1,4 +1,4 @@
-// This assignment is inspired by a problem on Exercism (https://exercism.org/tracks/javascript/exercises/etl) that demonstrates Extract-Transform-Load using Scrabble's scoringFunction system. 
+// This assignment is inspired by a problem on Exercism (https://exercism.org/tracks/javascript/exercises/etl) that demonstrates Extract-Transform-Load using Scrabble's scorerFunction system. 
 
 const input = require("readline-sync");
 
@@ -11,6 +11,8 @@ const oldPointStructure = {
   8: ['J', 'X'],
   10: ['Q', 'Z']
 };
+
+
 
 function oldScrabbleScorer(word) {
 	word = word.toUpperCase();
@@ -78,14 +80,27 @@ let scrabbleScorer = (word) => {
    word = word.toUpperCase();
    let letterPoints = 0;
 	for (let i = 0; i < word.length; i++) {
- 	  for (const pointValue in oldPointStructure) {
- 		 if (oldPointStructure[pointValue].includes(word[i])) {
+      if (word[i] in newPointStructure) {
+         letterPoints += newPointStructure[i];
+      }
+     
+     
+      ////////////////////////
+ 	  /*for (const pointValue in newPointStructure) {
+ 		 if (newPointStructure[pointValue].includes(word[i])) {
 			letterPoints += Number(pointValue);
 		 }
- 	  }
+ 	  }*/
+     ////////////////////
+     /*if(word[i] in newPointStructure) {
+      console.log("Heck Yeah");
+     }*/
+
 	}
 	return letterPoints;
 };
+
+//console.log(scrabbleScorer("Lathan"));//testing
 
 let scorringOptions = [simpleScorer,vowelBonusScorer,oldScrabbleScorer];
 //let scorringOptions = [simpleScorer,vowelBonusScorer,scrabbleScorer];
@@ -93,22 +108,22 @@ let scorringOptions = [simpleScorer,vowelBonusScorer,oldScrabbleScorer];
 let howToScoreScrabbleOne = {
    "name": "Simple Score",
    "description": "Each letter is worth 1 point.",
-   "scoringFunction": scorringOptions[0],
+   "scorerFunction": scorringOptions[0],
 
 };
 let howToScoreScrabbleTwo = {
    "name": "Bonus Vowels",
    "description": "Vowels are 3 pts, consonants are 1 pt",
-   "scoringFunction": scorringOptions[1],
+   "scorerFunction": scorringOptions[1],
 
 };
 let howToScoreScrabbleThree = {
    "name": "Scrabble",
-   "description": "The traditional scoringFunction algorithm.",
-   "scoringFunction": scorringOptions[2],
+   "description": "The traditional scoring algorithm.",
+   "scorerFunction": scorringOptions[2],
 
 };
-const scoringFunctionAlgorithms = [howToScoreScrabbleOne,howToScoreScrabbleTwo,howToScoreScrabbleThree];
+const scoringAlgorithms = [howToScoreScrabbleOne,howToScoreScrabbleTwo,howToScoreScrabbleThree];
 
 function scorerPrompt() {
    console.log(`Here are your scoring options:
@@ -116,50 +131,31 @@ function scorerPrompt() {
                 1 : Vowel Bonus
                 2: Old school Scrabble`);
    let userscoringFunctionOption = input.question("What scoring option would you like to use? ");
-   return(scoringFunctionAlgorithms[userscoringFunctionOption]); //this returns an object
+   return(scoringAlgorithms[userscoringFunctionOption]); //this returns an object
 }
 
-//console.log(scorerPrompt()); //testing
-//let pickedScoringOption = scorerPrompt(); //testing
-
-//console.log(scorerPrompt.scoringFunction); //testing
-
 function transform(oldStructure) {
-   let tempObject = {};
+   let tempNewPointStructure = {};
    let tempObjectTwo = {};
    let tempArr = []; //testing
    for (prop in oldStructure) {
       for (let i = 0; i < oldStructure[prop].length; i++) {
-         tempObject[oldPointStructure[prop][i].toLowerCase()] = prop;
+         tempNewPointStructure[oldPointStructure[prop][i].toLowerCase()] = Number(prop);
       } 
-      
-      tempArr = tempArr.concat(oldStructure[prop]); //testing
-      if (tempArr[0] in oldStructure[prop]) {//testing
-         console.log("yes");//testing
-      }//testing
-      
    }
-  // console.log(tempArr.sort());//testing and it works
-   return tempObject;
+  return tempNewPointStructure;
 };
-
-let newTestPointStructure = transform(oldPointStructure); //testing
-console.log(newTestPointStructure);//testing
-//onsole.log(typeof newTestPointStructure.a);//testing
-
-let newPointStructure;
-
+let newPointStructure = transform(oldPointStructure);
+console.log(newPointStructure);//testing
 
 function runProgram() {
    initialPrompt();
    let pickedScoringOption = scorerPrompt();
-   let wordScore = pickedScoringOption.scoringFunction(userInputedWord);
+   let wordScore = pickedScoringOption.scorerFunction(userInputedWord);
    console.log(`Your total score for the word is ${wordScore}`);
-   
-
-   //console.log(userscoringFunctionOption);//testing
-   
 }
+
+
 
 // Don't write any code below this line //
 // And don't change these or your program will not run as expected //
@@ -170,7 +166,7 @@ module.exports = {
    simpleScorer: simpleScorer,
    vowelBonusScorer: vowelBonusScorer,
    scrabbleScorer: scrabbleScorer,
-   scoringFunctionAlgorithms: scoringFunctionAlgorithms,
+   scoringAlgorithms: scoringAlgorithms,
    newPointStructure: newPointStructure,
 	runProgram: runProgram,
 	scorerPrompt: scorerPrompt
