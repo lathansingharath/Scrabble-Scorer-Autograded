@@ -65,7 +65,7 @@ let simpleScorer = (word) => {
   return word.length;
 };
 
-let vowelArr = ["A","E","I","O","U","Y"];
+let vowelArr = ["A","E","I","O","U"];
 let vowelBonusScorer = (word) => {
    word = word.toUpperCase();
    let letterPoints = 0;
@@ -92,22 +92,22 @@ let scrabbleScorer = (word) => {
 };
 
 //let scorringOptions = [simpleScorer,vowelBonusScorer,oldScrabbleScorer];
-let scorringOptions = [simpleScorer,vowelBonusScorer,scrabbleScorer];
+//let scorringOptions = [simpleScorer,vowelBonusScorer,scrabbleScorer];
 
 let scoringBySimple = {
    "name": "Simple Score",
    "description": "Each letter is worth 1 point.",
-   "scorerFunction": scorringOptions[0],
+   "scorerFunction": simpleScorer,
 };
 let scoringByVowels = {
    "name": "Bonus Vowels",
    "description": "Vowels are 3 pts, consonants are 1 pt",
-   "scorerFunction": scorringOptions[1],
+   "scorerFunction": vowelBonusScorer,
 };
 let scoringByScrabble = {
    "name": "Scrabble",
    "description": "The traditional scoring algorithm.",
-   "scorerFunction": scorringOptions[2],
+   "scorerFunction": scrabbleScorer,
 };
 const scoringAlgorithms = [scoringBySimple,scoringByVowels,scoringByScrabble];
 
